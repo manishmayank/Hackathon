@@ -30,7 +30,7 @@ class QuestionsController < ApplicationController
   # GET /questions/1
   # GET /questions/1.json
   def show
-    question_id = params[:question_id].to_i
+    question_id = params[:question_id]
 
     question = Question.find(question_id)
     answers = question.answers
@@ -44,10 +44,21 @@ class QuestionsController < ApplicationController
       answer_list << answer_map
     end
 
+    tags = question.tags
+
+    actual_tags = Array.new
+
+    tags.each do |tag|
+      tag_map = Hash.new
+      tag_map["name"] = tag.name
+      tag_map["id"] = tag.id
+      actual_tags << tag_map
+    end
+
     # answer_map = 
 
     respond_to do |format|
-      format.json {render json: {question: question, create_time: (question.created_at.to_f * 1000).to_i, question_comments: comments, answers: answer_list}}
+      format.json {render json: {question: question, tags: actual_tags, create_time: (question.created_at.to_f * 1000).to_i, question_comments: comments, answers: answer_list}}
     end
   end
 
@@ -77,12 +88,32 @@ class QuestionsController < ApplicationController
         # question.create_time = (question.created_at.to_f*1000).to_i.to_s
         #question.save
         # format.html { redirect_to question, notice: 'Question was successfully created.' }
-        format.json { render json: {success: true} }
+        format.json { render json: {success: true, question: question, create_time: (question.created_at.to_f * 1000).to_i} }
       else
         #format.html { render :new }
-        format.json { render json: question.errors, status: :unprocessable_entity }
+        format.json { render json: {success: false} }
       end
     end
+
+    tag_list = Array.new
+
+    tag_list << params[:tag1]
+    tag_list << params[:tag2]
+    tag_list << params[:tag3]
+    tag_list << params[:tag4]
+    tag_list << params[:tag5]
+
+    actual_tag_list = Array.new
+
+    tag_list.each do |tag|
+      t = Tag.find_by_name(tag).first
+      unless t
+        t = Tag.create(tag: tag)
+      end
+      actual_tag_list << t
+     
+    end
+    question.tags << actual_tag_list
   end
 
   # PATCH/PUT /questions/1
@@ -93,11 +124,11 @@ class QuestionsController < ApplicationController
       if question.update(content: params[:content], title: params[:title])
         # question.update_time = (question.updated_at.to_f*1000).to_i.to_s
         question.save
-        format.html { redirect_to question, notice: 'Question was successfully updated.' }
-        format.json { render :show, status: :ok, location: question }
+        # format.html { redirect_to question, notice: 'Question was successfully updated.' }
+        format.json { render json: {success: true} }
       else
-        format.html { render :edit }
-        format.json { render json: question.errors, status: :unprocessable_entity }
+        # format.html { render :edit }
+        format.json { render json: {success: false} }
       end
     end
   end
@@ -108,8 +139,8 @@ class QuestionsController < ApplicationController
     question = question.find(params[:id])
     question.destroy
     respond_to do |format|
-      format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
-      format.json { head :no_content }
+      # format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
+      format.json { render json: {success: true} }
     end
   end
 

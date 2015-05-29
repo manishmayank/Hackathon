@@ -61,6 +61,24 @@ class TagsController < ApplicationController
     end
   end
 
+  def search
+    tag = Tag.find(params[:tag_id])
+    questions = tag.questions.select(:title,:id,:upvotes,:downvotes,:created_at)
+
+    questions_all = Array.new
+    questions.each do |question|
+      question_map = Hash.new
+      question_map['question'] = question
+      question_map['create_time'] = (question.created_at.to_f*1000).to_i 
+      questions_all << question_map
+    end
+    # @questions = Question.page(params[:page_num]).order('created_at DESC')
+    respond_to do |format|
+      # format.html {render 'index'}
+      format.json {render json: questions_all}
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_tag
