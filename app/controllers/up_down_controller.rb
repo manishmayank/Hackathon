@@ -1,7 +1,7 @@
 class UpDownController < ApplicationController
 	def ques_upvote
     success = false
-    updown_query = UpDown.where(:user_id => :params[:user_id], :question_id => :params[:question_id]))
+    updown_query = UpDown.where(:user_id => params[:user_id], :question_id => params[:question_id]))
     if (updown_query)
       if(updown_query.down)
         updown_query.down = false
@@ -26,7 +26,7 @@ class UpDownController < ApplicationController
 
   def ques_downvote
     success = false
-    updown_query = UpDown.where(:user_id => :params[:user_id], :question_id => :params[:question_id]))
+    updown_query = UpDown.where(:user_id => params[:user_id], :question_id => params[:question_id]))
     if (updown_query)
       if(updown_query.up)
         updown_query.up = false

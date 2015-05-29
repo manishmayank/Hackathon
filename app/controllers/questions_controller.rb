@@ -106,9 +106,9 @@ class QuestionsController < ApplicationController
     actual_tag_list = Array.new
 
     tag_list.each do |tag|
-      t = Tag.find_by_name(tag).first
+      t = Tag.find_by_name(tag)
       unless t
-        t = Tag.create(tag: tag)
+        t = Tag.create(name: tag)
       end
       actual_tag_list << t
      
@@ -136,7 +136,7 @@ class QuestionsController < ApplicationController
   # DELETE /questions/1
   # DELETE /questions/1.json
   def destroy
-    question = question.find(params[:id])
+    question = Question.find(params[:question_id])
     question.destroy
     respond_to do |format|
       # format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
