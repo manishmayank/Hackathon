@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529101122) do
+ActiveRecord::Schema.define(version: 20150529132231) do
 
   create_table "answers", force: :cascade do |t|
     t.text     "content",     limit: 65535
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20150529101122) do
     t.integer  "downvotes",  limit: 4
     t.integer  "user_id",    limit: 4
     t.string   "title",      limit: 255
+    t.integer  "difference", limit: 4
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
   end
@@ -65,6 +66,28 @@ ActiveRecord::Schema.define(version: 20150529101122) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  create_table "up_down_answers", force: :cascade do |t|
+    t.integer  "answer_id",  limit: 4
+    t.integer  "user_id",    limit: 4
+    t.boolean  "up",         limit: 1
+    t.boolean  "down",       limit: 1
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "up_down_answers", ["answer_id", "user_id"], name: "index_up_down_answers_on_answer_id_and_user_id", using: :btree
+
+  create_table "up_downs", force: :cascade do |t|
+    t.integer  "question_id", limit: 4
+    t.integer  "user_id",     limit: 4
+    t.boolean  "up",          limit: 1
+    t.boolean  "down",        limit: 1
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "up_downs", ["question_id", "user_id"], name: "index_up_downs_on_question_id_and_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",        limit: 255

@@ -6,6 +6,8 @@ class CreateAnswers < ActiveRecord::Migration
       t.integer :downvotes
       t.integer :user_id
       t.integer :question_id
+      # t.string :create_time
+      # t.string :udpate_time
       t.timestamps null: false
     end
 

@@ -1,9 +1,20 @@
 Rails.application.routes.draw do
-  resources :tags
-  resources :users
-  resources :answers
-  resources :comments
-  resources :questions
+  # resources :tags
+  # resources :users
+  # resources :answers
+  # resources :comments
+  # resources :questions
+
+  # get 'question/index'
+  # match ':controller(/:action(/:id))', :via => :get
+  # match ':controller/:action', :via => :get
+  get "questions/index"
+  get "questions/create"
+  get "questions/show"
+  post "questions/upvote" => "up_down#ques_upvote"
+  post "questions/downvote" => "up_down#ques_downvote"
+  post "answers/downvote" => "up_down_answer#ans_downvote"
+  post "answers/downvote" => "up_down_answer#ans_downvote"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

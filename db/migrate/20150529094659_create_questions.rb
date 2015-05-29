@@ -8,6 +8,9 @@ class CreateQuestions < ActiveRecord::Migration
       t.integer :downvotes
       t.integer :user_id
       t.string :title
+      # t.string :create_time
+      # t.string :update_time
+      t.integer :difference
       t.timestamps null: false
     end
 
